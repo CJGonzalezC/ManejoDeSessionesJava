@@ -1,8 +1,6 @@
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -13,61 +11,61 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = {"/ContadorSession"})
 public class ContadorSession extends HttpServlet {
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ContadorSession</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ContadorSession at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     
          // processRequest(request, response);
-       
-       HttpSession sesion = request.getSession();
-       String titulo = null;
-       
-       Integer contadorvisitas = (Integer) sesion.getAttribute("contadorVisitas");
-       //Integer contadorvisitas = (Integer) sesion.getAttribute("contadorVisitas");
+         
+        HttpSession sesion = request.getSession();
+        
 
-       
-        if (contadorvisitas == null) {
-            contadorvisitas = 1;
-            titulo = "Bienvenido por primera vez";
-        }else{
-            titulo="Bienvenido X "+contadorvisitas;
-            contadorvisitas++;
+//se recibe del index
+        String valor1 = request.getParameter("hombre");        
+        String valor2 = request.getParameter("mujer");
+        String LogOut = request.getParameter("LogOut");        
+
+        
+        Integer conteohombre = (Integer) sesion.getAttribute("Cookiehombre");
+        Integer conteomujer = (Integer) sesion.getAttribute("Cookiemujer");
+        
+        if (LogOut != null) {
+            sesion.invalidate();
+            response.sendRedirect("index.html");
+            //El siguiente return es para salir del metodo.
+            return;
+            
         }
         
-        sesion.setAttribute("contadorVisitas", contadorvisitas);
-        
-        PrintWriter out = response.getWriter();
-        
-        out.print("Titulo:"+titulo+"  ");
-        out.println("Contador :"+contadorvisitas +"  ");
-        out.print("Id Session :"+sesion.getId());
-        
-        Date tiempo = new Date();
-        tiempo.setTime(sesion.getCreationTime());
-        out.println("Tiempo: "+tiempo);
-        
-        Cookie cookie = new Cookie("Galletuki","Galletuki1");
+        if (valor1 != null && valor2 == null) {
+            if (conteohombre == null ) {
+            conteohombre=1; 
+            }
+            else{
+                conteohombre++;
+            }   
+        }
+        else{
+            if (conteomujer == null ) {
+            conteomujer=1; 
+            }
+            else{
+                conteomujer++;
+            }
+        }
+//        Cookie cookie = new Cookie("Cookiehombre","value"+conteohombre);       
+        Cookie cookie = new Cookie("Cookiehombre",conteohombre.toString());       
+
         response.addCookie(cookie);
+        sesion.setAttribute("Cookiehombre", conteohombre);
+    
+        Cookie cookie1 = new Cookie("Cookiemujer","value"+conteomujer);       
+        response.addCookie(cookie1);
+        sesion.setAttribute("Cookiemujer", conteomujer);
+        
         
         response.sendRedirect("ConteoCookies");
-
     }
     
     
@@ -114,7 +112,7 @@ public class ContadorSession extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+//        processRequest(request, response);
     }
 
 
