@@ -45,6 +45,10 @@ public class ContadorSession extends HttpServlet {
             else{
                 conteohombre++;
             }   
+      //        Cookie cookie = new Cookie("Cookiehombre","value"+conteohombre);       
+            Cookie cookie = new Cookie("Cookiehombre",conteohombre.toString());
+            response.addCookie(cookie);
+            sesion.setAttribute("Cookiehombre", conteohombre);
         }
         else{
             if (conteomujer == null ) {
@@ -53,18 +57,10 @@ public class ContadorSession extends HttpServlet {
             else{
                 conteomujer++;
             }
+            Cookie cookie1 = new Cookie("Cookiemujer",conteomujer.toString());       
+            response.addCookie(cookie1);
+            sesion.setAttribute("Cookiemujer", conteomujer);
         }
-//        Cookie cookie = new Cookie("Cookiehombre","value"+conteohombre);       
-        Cookie cookie = new Cookie("Cookiehombre",conteohombre.toString());       
-
-        response.addCookie(cookie);
-        sesion.setAttribute("Cookiehombre", conteohombre);
-    
-        Cookie cookie1 = new Cookie("Cookiemujer","value"+conteomujer);       
-        response.addCookie(cookie1);
-        sesion.setAttribute("Cookiemujer", conteomujer);
-        
-        
         response.sendRedirect("ConteoCookies");
     }
     
